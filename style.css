@@ -238,3 +238,11 @@ footer a {
     font-family: 'Roboto', sans-serif;
     color: rgb(255, 255, 255);
 }
+
+.eraser:hover {
+    opacity: 1;
+    transform: scale(1.03); 
+    box-shadow: 0 0 10px 2px #ffdb4e, 
+                0 0 20px 5px rgba(255, 219, 78, 0.5); 
+    transition: all 0.2s ease-in-out;
+}
