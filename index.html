@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,8 +10,10 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" href="./img/icon.png" type="image/png">
 </head>
+
 <body>
-    <h1><span class="etch">Pixelated</span><span class="dash">-</span><span class="a">-</span><span class="dash">-</span><span class="sketch">Draw</span></h1>
+    <h1><span class="etch">Pixelated</span><span class="dash">-</span><span class="a">-</span><span
+            class="dash">-</span><span class="sketch">Draw</span></h1>
     <div class="content">
         <div class="control-panel">
             <h2>Controls</h2>
@@ -21,6 +24,17 @@
             <button class="rainbow">Rainbow mode</button>
             <button class="eraser">Eraser</button>
             <button class="clear">Clear</button>
+            <div class="outline-section">
+                <label for="outline-select">Outline:</label>
+                <select id="outline-select">
+                    <option value="none">None</option>
+                    <option value="heart">Heart</option>
+                    <option value="star">Star</option>
+                    <option value="circle">Circle</option>
+                    <option value="square">Square</option>
+                    <option value="triangle">Triangle</option>
+                </select>
+            </div>
             <div class="grid-line">
                 <label for="gridlines-toggle">Toggle Gridlines:</label>
                 <input type="checkbox" id="gridlines-toggle" checked>
@@ -29,12 +43,23 @@
                 <label for="box-slider"><span class="box-count">16</span>x<span class="box-count">16</span></label>
                 <input type="range" min="1" max="100" value="16" id="box-slider">
             </div>
-            <button class="download">Download</button>
+            <div class="extra-features">
+                <button class="fill-bucket">Fill</button>
+                <button class="download">Download</button>
+            </div>
         </div>
-        <div class="grid"></div>
+        <div class="drawing-area">
+            <div class="grid"></div>
+            <div class="tools-overlay">
+                <button class="undo-btn" title="Undo (Ctrl+Z)">↶</button>
+                <button class="redo-btn" title="Redo (Ctrl+Y)">↷</button>
+            </div>
+        </div>
     </div>
     <footer>
-        <a href="https://github.com/yesiamrajeev"><img src="./img/github.svg" alt="gitHub logo"> @yesiamrajeev</a> | <a href="https://github.com/yesiamrajeev/Pixelated-Draw/">Source Code</a>
+        <a href="https://github.com/yesiamrajeev"><img src="./img/github.svg" alt="gitHub logo"> @yesiamrajeev</a> | <a
+            href="https://github.com/yesiamrajeev/Pixelated-Draw/">Source Code</a>
     </footer>
 </body>
+
 </html>
