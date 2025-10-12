@@ -89,6 +89,13 @@ body {
     box-shadow: 0 4px 15px rgba(255, 83, 205, 0.4);
 }
 
+.footer,
+.slider label,
+.grid-line label,
+.color label{
+
+}
+
 .undo-btn:hover, .redo-btn:hover {
     background: rgba(255, 83, 205, 0.3);
 }
@@ -504,9 +511,4 @@ footer a {
     font-weight: 700;
     font-family: 'Roboto', sans-serif;
     color: rgb(255, 255, 255);
-    transition: all 0.3s ease;
-}
-
-.box {
-    transition: background-color 0.05s ease;
 }
