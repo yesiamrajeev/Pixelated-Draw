@@ -7,8 +7,13 @@
          url('./font/hellodenverdisplayregular_v1.6.svg#HELLODENVERDISPLAYREGULARRg') format('svg');
 }
 
+* {
+    box-sizing: border-box;
+}
+
 body {
-    margin-top: 0px;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -16,7 +21,8 @@ body {
     text-transform: uppercase;
     font-family: neon;
     color: #fff;
-    background-color: #010a01;
+    background: linear-gradient(135deg, #010a01 0%, #0a1a0a 50%, #010a01 100%);
+    min-height: 100vh;
     text-align: center;
 }
 
@@ -27,41 +33,116 @@ body {
 
 .grid {
     background-color: #fff;
-    border: 3px double #010a01;
-    min-height: 500px;
-    min-width: 500px;
-    max-height: 500px;
-    max-width: 500px;
-    height: 500px;
-    width: 500px;
+    border: 4px solid #FF53cd;
+    border-radius: 12px;
+    min-height: 800px;
+    min-width: 800px;
+    max-height: 800px;
+    max-width: 800px;
+    height: 800px;
+    width: 800px;
+    box-shadow: 0 8px 32px rgba(255, 83, 205, 0.3),
+                0 0 60px rgba(0, 254, 155, 0.2);
+    transition: box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.grid:hover {
+    box-shadow: 0 12px 48px rgba(255, 83, 205, 0.4),
+                0 0 80px rgba(0, 254, 155, 0.3);
 }
 
 .content {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 100px;
-
+    gap: 60px;
     margin-bottom: 50px;
 }
 
-.control-panel {
+.drawing-area {
+    position: relative;
+}
 
+.tools-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.undo-btn, .redo-btn {
+    width: 45px;
+    height: 45px;
+    padding: 8px;
+    margin: 0;
+    font-size: 2rem;
+    background: rgba(1, 10, 1, 0.8);
+    backdrop-filter: blur(10px);
+    border: 2px solid #FF53cd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(255, 83, 205, 0.4);
+}
+
+.undo-btn:hover, .redo-btn:hover {
+    background: rgba(255, 83, 205, 0.3);
+}
+
+.extra-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.fill-bucket {
+    border: 2px solid #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.fill-bucket:hover {
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
+}
+
+.download {
+    border: 2px solid #a855f7;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}
+
+.download:hover {
+    box-shadow: 0 0 25px rgba(168, 85, 247, 0.6);
+}
+
+.control-panel {
     font-size: 1.4rem;
     text-align: center;
     text-transform: uppercase;
     font-weight: 400;
-
     display: flex;
     justify-content: space-between;
     align-items: stretch;
     align-content: center;
     flex-direction: column;
-    border-radius: 25px;
-    border: 5px double #FF53cd;
-    padding: 20px;
-    width: 200px;
-    height: 500px;
+    border-radius: 20px;
+    border: 3px solid #FF53cd;
+    background: rgba(1, 10, 1, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    width: 240px;
+    height: 640px;
+    box-shadow: 0 8px 32px rgba(255, 83, 205, 0.3),
+                inset 0 0 20px rgba(255, 83, 205, 0.1);
+    transition: all 0.3s ease;
+}
+
+.control-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 48px rgba(255, 83, 205, 0.4),
+                inset 0 0 30px rgba(255, 83, 205, 0.15);
 }
 
 .footer {
@@ -72,46 +153,188 @@ body {
 }
 
 h2 {
-    margin: 16px;
-    font-size: 2rem;
+    margin: 10px 0 20px 0;
+    font-size: 2.2rem;
     font-weight: 400;
+    color: #00fe9b;
+    text-shadow: 0 0 20px rgba(0, 254, 155, 0.6);
 }
 
 .color{
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
-    margin: 16px;
+    margin: 12px 0;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
 }
 
-.footer,
-.slider label,
-.grid-line label,
-.color label{
+.color:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
 
+.slider {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 12px 0;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.slider:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.slider label {
+    font-size: 1.5rem;
+    color: #FF53cd;
+}
+
+#box-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 5px;
+    background: rgba(255, 83, 205, 0.2);
+    outline: none;
+    cursor: pointer;
+    accent-color: #FF53cd;
+}
+
+#box-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #FF53cd;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 83, 205, 0.6);
+    transition: all 0.3s ease;
+}
+
+#box-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(255, 83, 205, 0.8);
+}
+
+#box-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #FF53cd;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 10px rgba(255, 83, 205, 0.6);
+    transition: all 0.3s ease;
+}
+
+#box-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(255, 83, 205, 0.8);
 }
 
 .grid-line{
-    margin-top: 16px;
-    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 12px 0;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.grid-line:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.grid-line label {
+    font-size: 1.4rem;
+    color: #ffdb4e;
+}
+
+#gridlines-toggle {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #FF53cd;
+}
+
+.outline-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    margin: 12px 0;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.outline-section:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.outline-section label {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #00fe9b;
+}
+
+#outline-select {
+    font-family: neon;
+    background: rgba(0, 254, 155, 0.1);
+    color: white;
+    border: 2px solid #00fe9b;
+    padding: 8px 12px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+#outline-select:hover {
+    background: rgba(0, 254, 155, 0.2);
+    box-shadow: 0 0 15px rgba(0, 254, 155, 0.4);
+}
+
+#outline-select:focus {
+    outline: none;
+    border-color: #FF53cd;
+    box-shadow: 0 0 20px rgba(255, 83, 205, 0.5);
 }
 .color label{
     font-size: 1.5rem;
     font-weight: 400;
 }
 
-#color-picker {
+#color-picker{
     -webkit-appearance: none; 
     -moz-appearance: none;    
     appearance: none;       
     border: none;
-    border: 0.1px solid #ccc; 
+    border: 2px solid #FF53cd;
     opacity: 0.5;
-    outline: none;
+    background-color: transparent;
+    padding: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
     cursor: pointer;
-    background-color: #000;
-    padding: 0px;
+    transition: all 0.3s ease;
+}
+
+#color-picker:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 83, 205, 0.5);
 }
 
 input:focus-visible {
@@ -120,22 +343,26 @@ input:focus-visible {
 }
 
 .rainbow {
-
-
     border: 2px solid #00fe9b;
+    box-shadow: 0 0 15px rgba(0, 254, 155, 0.3);
+}
 
+.rainbow:hover {
+    box-shadow: 0 0 25px rgba(0, 254, 155, 0.6);
 }
 
 .eraser {
-
-
     border: 2px solid #ffdb4e;
+    box-shadow: 0 0 15px rgba(255, 219, 78, 0.3);
+}
+
+.eraser:hover {
+    box-shadow: 0 0 25px rgba(255, 219, 78, 0.6);
 }
 
 .clear {
-
-
     border: 2px solid #FF5161;
+    box-shadow: 0 0 15px rgba(255, 81, 97, 0.3);
 }
 
 #box-slider::-webkit-slider-runnable-track {
@@ -159,6 +386,8 @@ input:focus-visible {
     border: 2px solid #53FFE2;
 }
 
+
+
 @font-face {
     font-family: 'neon';
     src: url('./font/hellodenverdisplayregular_v1.6.eot');
@@ -174,46 +403,82 @@ h1{
     justify-content: center;
     align-items: center;
     gap: 50px;
-    margin-top: 25px;
-    margin-bottom: 50px;
-    margin-left: 16px;
-    margin-right: 16px;
-    font-size: 4.2rem;
+    margin: 30px 16px 40px 16px;
+    font-size: 4.5rem;
     text-align: center;
     text-transform: uppercase;
     font-weight: 400;
+    animation: glow 2s ease-in-out infinite alternate;
 }
 
+@keyframes glow {
+    from {
+        text-shadow: 0 0 20px rgba(255, 83, 205, 0.5),
+                     0 0 40px rgba(0, 254, 155, 0.3);
+    }
+    to {
+        text-shadow: 0 0 30px rgba(255, 83, 205, 0.8),
+                     0 0 60px rgba(0, 254, 155, 0.5);
+    }
+}
 
 h1 .etch{
-    color: #fff;
+    color: #FF53cd;
 }
 
 h1 .a{
-    color: #fff;
+    color: #00fe9b;
 }
 
 h1 .sketch{
-    color: #fff;
+    color: #ffdb4e;
 }
 
 button{
     font-family: neon;
     color: white;
-    opacity: 0.6;
-    transition: 0.3s;
+    opacity: 0.8;
     cursor: pointer;
-    background-color: transparent;
-    padding: 10px 20px;
-    margin: 5px;
-    transition-duration: 0.4s;
-    font-size: 1.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 24px;
+    margin: 8px 0;
+    font-size: 1.6rem;
     text-align: center;
     text-transform: uppercase;
     font-weight: 400;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-button:hover {opacity: 1}
+button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+button:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+}
 
 footer{
     padding: 0 1rem;
@@ -261,4 +526,9 @@ footer a {
     font-weight: 700;
     font-family: 'Roboto', sans-serif;
     color: rgb(255, 255, 255);
+    transition: all 0.3s ease;
+}
+
+.box {
+    transition: background-color 0.05s ease;
 }
