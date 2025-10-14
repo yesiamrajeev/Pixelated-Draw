@@ -364,6 +364,24 @@ input:focus-visible {
     box-shadow: 0 0 25px rgba(255, 81, 97, 0.6);
 }
 
+/* Active state for buttons */
+.rainbow.active {
+    opacity: 1;
+    background: rgba(0, 254, 155, 0.15);
+    box-shadow: 0 0 25px rgba(0, 254, 155, 0.6);
+}
+
+.eraser.active {
+    opacity: 1;
+    background: rgba(255, 219, 78, 0.15);
+    box-shadow: 0 0 25px rgba(255, 219, 78, 0.6);
+}
+
+.fill-bucket.active {
+    opacity: 1;
+    background: rgba(0, 212, 255, 0.15);
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.6);
+}
 
 
 @font-face {
