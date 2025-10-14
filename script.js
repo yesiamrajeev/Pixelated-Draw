@@ -124,62 +124,88 @@ function redo() {
 }
 
 function floodFill(startBox, targetColor, fillColor) {
-    if (targetColor === fillColor) return;
-    if (startBox.classList.contains('outside-outline')) return;
-    
-    const queue = [startBox];
-    const visited = new Set();
-    
-    while (queue.length > 0) {
-        const box = queue.shift();
-        const boxId = box.id;
+    try {
+        if (targetColor === fillColor) return;
+        if (startBox.classList.contains('outside-outline')) return;
         
-        if (visited.has(boxId)) continue;
-        visited.add(boxId);
+        const queue = [startBox];
+        const visited = new Set();
+        const maxIterations = 10000; // Prevent infinite loops
+        let iterations = 0;
         
-        const currentColor = box.style.backgroundColor || 'white';
-        if (currentColor !== targetColor) continue;
-        if (box.classList.contains('outside-outline')) continue;
+        while (queue.length > 0 && iterations < maxIterations) {
+            iterations++;
+            const box = queue.shift();
+            const boxId = box.id;
+            
+            if (visited.has(boxId)) continue;
+            visited.add(boxId);
+            
+            const currentColor = box.style.backgroundColor || 'white';
+            if (currentColor !== targetColor) continue;
+            if (box.classList.contains('outside-outline')) continue;
+            
+            box.style.backgroundColor = fillColor;
+            
+            const [row, col] = boxId.split('-').map(Number);
+            const neighbors = [
+                document.getElementById(`${row-1}-${col}`),
+                document.getElementById(`${row+1}-${col}`),
+                document.getElementById(`${row}-${col-1}`),
+                document.getElementById(`${row}-${col+1}`)
+            ];
+            
+            neighbors.forEach(neighbor => {
+                if (neighbor && !visited.has(neighbor.id)) {
+                    queue.push(neighbor);
+                }
+            });
+        }
         
-        box.style.backgroundColor = fillColor;
-        
-        const [row, col] = boxId.split('-').map(Number);
-        const neighbors = [
-            document.getElementById(`${row-1}-${col}`),
-            document.getElementById(`${row+1}-${col}`),
-            document.getElementById(`${row}-${col-1}`),
-            document.getElementById(`${row}-${col+1}`)
-        ];
-        
-        neighbors.forEach(neighbor => {
-            if (neighbor && !visited.has(neighbor.id)) {
-                queue.push(neighbor);
-            }
-        });
+        if (iterations >= maxIterations) {
+            console.warn('Flood fill reached maximum iterations');
+        }
+    } catch (error) {
+        console.error('Error during flood fill:', error);
+        alert('An error occurred while filling. Please try again.');
     }
 }
 
 function downloadCanvas() {
-    const grid = document.querySelector('.grid');
-    const canvas = document.createElement('canvas');
-    const boxes = document.querySelectorAll('.box');
-    const gridSize = Math.sqrt(boxes.length);
-    
-    canvas.width = gridSize * 20;
-    canvas.height = gridSize * 20;
-    const ctx = canvas.getContext('2d');
-    
-    boxes.forEach(box => {
-        const [row, col] = box.id.split('-').map(Number);
-        const color = box.style.backgroundColor || 'white';
-        ctx.fillStyle = color;
-        ctx.fillRect(col * 20, row * 20, 20, 20);
-    });
-    
-    const link = document.createElement('a');
-    link.download = `pixelated-art-${Date.now()}.png`;
-    link.href = canvas.toDataURL();
-    link.click();
+    try {
+        const grid = document.querySelector('.grid');
+        const canvas = document.createElement('canvas');
+        const boxes = document.querySelectorAll('.box');
+        const gridSize = Math.sqrt(boxes.length);
+        
+        if (!boxes.length) {
+            alert('No drawing to download!');
+            return;
+        }
+        
+        canvas.width = gridSize * 20;
+        canvas.height = gridSize * 20;
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+            throw new Error('Failed to get canvas context');
+        }
+        
+        boxes.forEach(box => {
+            const [row, col] = box.id.split('-').map(Number);
+            const color = box.style.backgroundColor || 'white';
+            ctx.fillStyle = color;
+            ctx.fillRect(col * 20, row * 20, 20, 20);
+        });
+        
+        const link = document.createElement('a');
+        link.download = `pixelated-art-${Date.now()}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+    } catch (error) {
+        console.error('Error downloading canvas:', error);
+        alert('Failed to download image. Please try again.');
+    }
 }
 
 function clearGrid() {
@@ -219,7 +245,7 @@ function draw(color='black', rainbow=false) {
             saveState();
             floodFill(box, targetColor, fillColor);
             fillMode = false;
-            document.querySelector('.fill-bucket').style.opacity = '0.8';
+            document.querySelector('.fill-bucket').classList.remove('active');
             return;
         }
         
@@ -269,10 +295,10 @@ function gridAction() {
         createGrid(boxSlider.value);
         const colorPicker = document.querySelector("#color-picker");
         draw(colorPicker.value);
-        if (eraseButton.style.opacity == 1) {
+        if (eraseButton.classList.contains('active')) {
             draw('white');
         }
-        else if (rainbowButton.style.opacity == 1) {
+        else if (rainbowButton.classList.contains('active')) {
             draw('white',true);
         }
     });
@@ -280,20 +306,20 @@ function gridAction() {
     clearButton.onclick = clearGrid;
 
     eraseButton.addEventListener('click', () => {
-        eraseButton.style.cssText = "opacity: 1;"
-        rainbowButton.style.cssText = "font-family: neon; color: white; opacity: 0.6; transition: 0.3s; cursor: pointer; background-color: transparent; padding: 10px 20px; margin: 5px; transition-duration: 0.4s; font-size: 1.8rem; text-align: center; text-transform: uppercase; font-weight: 400;"
+        eraseButton.classList.add('active');
+        rainbowButton.classList.remove('active');
         draw('white');
     });
 
     rainbowButton.addEventListener('click', () => {
-        rainbowButton.style.cssText = "opacity: 1;"
-        eraseButton.style.cssText = "font-family: neon; color: white; opacity: 0.6; transition: 0.3s; cursor: pointer; background-color: transparent; padding: 10px 20px; margin: 5px; transition-duration: 0.4s; font-size: 1.8rem; text-align: center; text-transform: uppercase; font-weight: 400;"
+        rainbowButton.classList.add('active');
+        eraseButton.classList.remove('active');
         draw('white',true);
     });
 
     colorButton.addEventListener('click', () => {
-        eraseButton.style.cssText = "font-family: neon; color: white; opacity: 0.6; transition: 0.3s; cursor: pointer; background-color: transparent; padding: 10px 20px; margin: 5px; transition-duration: 0.4s; font-size: 1.8rem; text-align: center; text-transform: uppercase; font-weight: 400;"
-        rainbowButton.style.cssText = "font-family: neon; color: white; opacity: 0.6; transition: 0.3s; cursor: pointer; background-color: transparent; padding: 10px 20px; margin: 5px; transition-duration: 0.4s; font-size: 1.8rem; text-align: center; text-transform: uppercase; font-weight: 400;"
+        eraseButton.classList.remove('active');
+        rainbowButton.classList.remove('active');
         const colorPicker = document.querySelector("#color-picker");
         draw(colorPicker.value);
     });
@@ -318,10 +344,10 @@ function gridAction() {
         createGrid(boxSlider.value);
         const colorPicker = document.querySelector("#color-picker");
         draw(colorPicker.value);
-        if (eraseButton.style.opacity == 1) {
+        if (eraseButton.classList.contains('active')) {
             draw('white');
         }
-        else if (rainbowButton.style.opacity == 1) {
+        else if (rainbowButton.classList.contains('active')) {
             draw('white', true);
         }
     });
@@ -329,7 +355,11 @@ function gridAction() {
     const fillButton = document.querySelector('.fill-bucket');
     fillButton.addEventListener('click', () => {
         fillMode = !fillMode;
-        fillButton.style.opacity = fillMode ? '1' : '0.8';
+        if (fillMode) {
+            fillButton.classList.add('active');
+        } else {
+            fillButton.classList.remove('active');
+        }
     });
 
     const downloadButton = document.querySelector('.download');
